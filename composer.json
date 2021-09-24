@@ -1,0 +1,14 @@
+{
+  "name": "pjam/prig",
+  "description": "Php Random Image Generator",
+  "minimum-stability": "stable",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Flávio",
+      "email": "email@example.com"
+    }
+  ],
+  "require": {
+  }
+}
