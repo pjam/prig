@@ -33,7 +33,7 @@ class ImageGenerator
     private const DEFAULT_PARAMS = [
         'height' => 200,
         'width' => 200,
-        'type' => 'png',
+        'type' => 'jpeg',
     ];
 
     private array $params;
@@ -148,14 +148,14 @@ class ImageGenerator
         try {
             switch ($this->params['type']) {
                 case 'jpeg':
-                    imagejpeg($imageObject);
+                    imagejpeg($imageObject, null, 50);
                     break;
                 case 'webp':
-                    imagewebp($imageObject);
+                    imagewebp($imageObject, null, 50);
                     break;
                 case 'png':
                 default:
-                    imagepng($imageObject);
+                    imagepng($imageObject, null, 7);
             }
 
             imagedestroy($imageObject);
