@@ -34,7 +34,13 @@ class ImageGenerator
         'height' => 200,
         'width' => 200,
         'type' => 'jpeg',
+        'numColors' => null,
     ];
+
+    /**
+     * @var int
+     */
+    private const MAX_COLOR_COUNT = 256;
 
     private array $params;
 
@@ -80,6 +86,10 @@ class ImageGenerator
             $validParams['type'] = str_replace('jpg', 'jpeg', $requestParams['type']);
         }
 
+        if (isset($requestParams['numColors']) && is_numeric($requestParams['numColors']) && $this->isColorCountValid($requestParams['numColors'])) {
+            $validParams['numColors'] = (int)$requestParams['numColors'];
+        }
+
         return $validParams;
     }
 
@@ -94,21 +104,61 @@ class ImageGenerator
     }
 
     /**
+     * @param int $numColors
+     *
+     * @return bool
+     */
+    private function isColorCountValid(int $numColors): bool
+    {
+        return ($numColors <= static::MAX_COLOR_COUNT);
+    }
+
+    /**
      * @return \GdImage
      */
-    public function createImage(): GdImage
+    public function createRandomImage(): GdImage
     {
         $image = imagecreatetruecolor($this->params['width'], $this->params['height']);
+        $colorsArray = $this->buildColorsArray($image);
 
+        $colorCounter = 0;
         for ($heightPixel = 0; $heightPixel < $this->params['height']; $heightPixel ++) {
             for ($widthPixel = 0; $widthPixel < $this->params['width']; $widthPixel ++) {
-                $color = $this->getRandomColor($image);
+                $color = $colorsArray[$colorCounter ++];
 
                 imagesetpixel($image, $widthPixel, $heightPixel, $color);
             }
         }
 
         return $image;
+    }
+
+    /**
+     * @param \GdImage $imageObject
+     *
+     * @return int[]
+     */
+    private function buildColorsArray(GdImage $imageObject): array
+    {
+        $imageSize = $this->params['width'] * $this->params['height'];
+        $colorCount = $this->params['numColors'] ?: $imageSize;
+
+        $colors = [];
+
+        for ($colorIndex = 0; $colorIndex < $colorCount; $colorIndex ++) {
+            $colors[] = $this->getRandomColor($imageObject);
+        }
+
+        if ($colorCount === $imageSize) {
+            return $colors;
+        }
+
+        $colorsArray = [];
+        for ($pixelCount = 0; $pixelCount < $imageSize; $pixelCount ++) {
+            $colorsArray[] = $colors[array_rand($colors, 1)];
+        }
+
+        return $colorsArray;
     }
 
     /**

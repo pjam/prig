@@ -6,6 +6,6 @@ require_once '../vendor/autoload.php';
 
 $imageGenerator = new ImageGenerator($_GET);
 
-$imageObject = $imageGenerator->createImage();
+$imageObject = $imageGenerator->createRandomImage();
 
 $imageGenerator->outputImage($imageObject);
