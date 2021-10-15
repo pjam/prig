@@ -6,15 +6,12 @@
   "authors": [
     {
       "name": "Flávio",
-      "email": "email@example.com"
+      "email": "flaviorosa@gmail.com"
     }
   ],
   "require": {
     "php": ">=8.0",
     "ext-gd": "*"
-  },
-  "require-dev": {
-    "heroku/heroku-buildpack-php": "*"
   },
   "autoload": {
     "psr-4": {
