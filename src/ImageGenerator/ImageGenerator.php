@@ -213,4 +213,34 @@ class ImageGenerator
             error_log('ERROR: ' . $exception->getMessage());
         }
     }
+
+    /**
+     * @param \GdImage $imageObject
+     *
+     * @return string
+     */
+    public function getEncodedImage(GdImage $imageObject): string
+    {
+        ob_start();
+
+        switch ($this->params['type']) {
+            case 'jpeg':
+                imagejpeg($imageObject, null, 50);
+                break;
+            case 'webp':
+                imagewebp($imageObject, null, 50);
+                break;
+            case 'png':
+            default:
+                imagepng($imageObject, null, 7);
+        }
+
+        $imageData = ob_get_clean();
+
+        return sprintf(
+            'data:image/%s;base64,%s',
+            $this->params['type'],
+            base64_encode( $imageData )
+        );
+    }
 }
