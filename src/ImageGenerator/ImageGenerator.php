@@ -42,6 +42,11 @@ class ImageGenerator
      */
     private const MAX_COLOR_COUNT = 256;
 
+    /**
+     * @var int
+     */
+    private const MIN_COLOR_COUNT = 1;
+
     private array $params;
 
     private bool $isDebug;
@@ -110,7 +115,7 @@ class ImageGenerator
      */
     private function isColorCountValid(int $numColors): bool
     {
-        return ($numColors <= static::MAX_COLOR_COUNT);
+        return ($numColors <= static::MAX_COLOR_COUNT) && ($numColors >= static::MIN_COLOR_COUNT);
     }
 
     /**
